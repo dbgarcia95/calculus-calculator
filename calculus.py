@@ -46,14 +46,17 @@ def analyzeTerms(exp):
             #When no coefficient is written, sets it equal to 1
             else:
                 coString=term[:term.index('x')]
+                
             dissectedTerm.append(coString)
             dissectedTerm.append('x')
+            
         elif 'x' in term and '^' in term:
         #Dissects exponential terms
             if 'x'==term[0]:
                 coString='1'
             else:
                 coString=term[:term.index('x')]
+                
             dissectedTerm.append(coString)
             dissectedTerm.append('x')
             exponent=term[term.index('^')+1:]
@@ -65,6 +68,7 @@ def analyzeTerms(exp):
             raisedTermArray.append(term)
 
     raisedTermArray.sort(key=basicPolySort, reverse=True)
+    #Sorts the terms in traditional descending polynomial order
     for term in raisedTermArray:
         sortedTermArray.append(term)
     for term in dissectedTermArray:
@@ -119,7 +123,7 @@ def powerRuleDerivative(exp): #Applies the Power Rule
     derivative=''.join(fullDerArr)
 
     return derivative
-
+    #Takes 3x^3-7x^2+16x+7 and returns 9x^2-14x+16
 
 #The chain rule states that the derivative of f(g(x))= f'(g(x))*g'x
 #Example: d/dx (3x^2-7)^2 = 2*(3x^2-7)*6x or 12x(3x^2-7) or 36x^3-84x
@@ -128,7 +132,7 @@ def chainRuleDerivative(exp):
         outerCo=int(exp[:exp.index( '(' )])
     else:
         outerCo= 1
-    uVal=exp[exp.index('('):exp.index(')')].replace( '(' , '' )
+    uVal=exp[exp.index( '(' ):exp.index( ')' )].replace( '(' , '' )
     #Extracts 3x^2-7
     uPrime=powerRuleDerivative(uVal)
     #Differentiates 6x, the inner value
@@ -143,18 +147,20 @@ def chainRuleDerivative(exp):
         der='%s(%s)^%s(%s)' % (outerCoDer, uVal, outerPwrDer, uPrime)
     else:
         der='%s(%s)(%s)' % (outerCoDer, uVal, uPrime)
-
     
     return der
 
-
+#Start of the actual program loop
 while True:
     print('Enter a one-variable expression in descending exponential order\nto find its derivative with respect to x')
     print('Or type "exit" to exit the program')
     expression=input().lower()
+    #Code to determine which rule(s) to apply to the given expression
     if expression=='e^x':
         print('e^x')
     elif expression=='exit':
         break
-    else:
+    elif '(' in expression and ')' in expression:
         print(chainRuleDerivative(expression))
+    else:
+        print(powerRuleDerivative(expression))
